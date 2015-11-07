@@ -40,23 +40,18 @@ class DeleteApiKeyCommand extends Command
     {
         $key = $this->option('api-key');
 
-        if ( ! is_null($key)) {
+        if (!is_null($key)) {
             // we delete a specific API key
-            $confirmation = $this->ask("Are you sure you want to delete this API key? [y/n]");
 
-            if ($confirmation == 'y') {
-                $apiKeyModel = App::make(Config::get('apiguard.model', 'Chrisbjr\ApiGuard\Models\ApiKey'));
-                $apiKey = $apiKeyModel->where('key', '=', $key)->first();
+            $apiKeyModel = App::make(Config::get('apiguard.model', 'Chrisbjr\ApiGuard\Models\ApiKey'));
+            $apiKey = $apiKeyModel->where('key', '=', $key)->first();
 
-                if (empty($apiKey) || $apiKey->exists == false) {
-                    $this->info("The API key you specified does not exist.");
-                    return;
-                }
-
-                $this->info("The API key {$key} was deleted.");
-
+            if (empty($apiKey) || $apiKey->exists == false) {
+                $this->info("The API key you specified does not exist.");
                 return;
             }
+
+            $this->info("The API key {$key} was deleted.");
 
             return;
         }

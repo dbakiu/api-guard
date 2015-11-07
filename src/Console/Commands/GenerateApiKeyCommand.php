@@ -38,23 +38,6 @@ class GenerateApiKeyCommand extends Command
      */
     public function fire()
     {
-        $userId = $this->getOption('user-id', 0);
-
-        if ( ! empty($userId)) {
-
-            // check whether this user already has an API key
-            $apiKeyModel = App::make(Config::get('apiguard.model', 'Chrisbjr\ApiGuard\Models\ApiKey'));
-
-            $apiKey = $apiKeyModel->where('user_id', '=', $userId)->first();
-
-            if ($apiKey) {
-                $overwrite = $this->ask("This user already has an existing API key. Do you want to create another one? [y/n]");
-                if ($overwrite == 'n') {
-                    return;
-                }
-            }
-        }
-
         $apiKey = App::make(Config::get('apiguard.model', 'Chrisbjr\ApiGuard\Models\ApiKey'));
         $apiKey->key = $apiKey->generateKey();
         $apiKey->user_id = $this->getOption('user-id', 0);
