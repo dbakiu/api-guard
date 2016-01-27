@@ -42,11 +42,13 @@ abstract class ApiKeyRepository extends Eloquent
     public function generateKey()
     {
         do {
-            $salt = sha1(time() . mt_rand());
-            $newKey = substr($salt, 0, 40);
+            $newKey = "";
+            for($i = 0; $i < 3; $i++){
+                $salt = sha1(openssl_random_pseudo_bytes(256));
+                $newKey .= substr($salt, 0, 40);
+            }
         } // Already in the DB? Fail. Try again
         while (self::keyExists($newKey));
-
         return $newKey;
     }
 
